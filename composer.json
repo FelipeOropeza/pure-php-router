@@ -2,7 +2,7 @@
     "name": "user/rotas",
     "autoload": {
         "psr-4": {
-            "User\\Rotas\\": "src/"
+            "App\\": "src/"
         }
     },
     "authors": [
@@ -12,7 +12,10 @@
         }
     ],
     "scripts": {
-        "start": "php -S localhost:8000 -t public/index.php"
+        "start": "php -S localhost:8000 -t public"
+    },
+    "config": {
+        "process-timeout": 0
     },
     "require": {}
 }
