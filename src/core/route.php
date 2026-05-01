@@ -5,21 +5,13 @@ namespace App\Core;
 class Route
 {
     private static array $routes = [];
-    private static string $baseView = __DIR__ . '/../view';
 
-    public static function add(string $metodo, string $name)
+    public static function add(string $method, string $name, string $controller)
     {
-        self::$routes[$metodo][$name] = true;
-    }
-
-    public static function view(string $name)
-    {
-        $file = self::$baseView . '/' . $name . '.php';
-        if (file_exists($file)) {
-            require_once $file;
-        } else {
-            die("Erro: A view '{$name}' não foi encontrada em " . self::$baseView);
-        }
+        self::$routes[$name] = [
+            'method' => $method,
+            'controller' => $controller
+        ];
     }
 
     public static function run()
@@ -27,13 +19,16 @@ class Route
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
 
-        if (isset(self::$routes[$method])) {
-            foreach (self::$routes[$method] as $path => $value) {
-                if ($path === $uri) {
-                    $viewName = trim($path, '/');
-                    self::view($viewName ?: 'index');
-                    return;
-                }
+        if (isset(self::$routes[$uri]) && self::$routes[$uri]['method'] === $method) {
+            $class = explode('@', self::$routes[$uri]['controller']);
+            $functionName = $class[1];
+
+            $className = "App\\Controller\\" . $class[0];
+            
+            if (class_exists($className)) {
+                $controller = new $className();
+                $controller->$functionName();
+                return;
             }
         }
 
