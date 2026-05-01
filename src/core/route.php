@@ -2,6 +2,9 @@
 
 namespace App\Core;
 
+use Uri\Rfc3986\Uri;
+use Uri\WhatWg\Url;
+
 class Route
 {
     private static array $routes = [];
@@ -16,11 +19,11 @@ class Route
 
     public static function run()
     {
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri = new Uri($_SERVER['REQUEST_URI']);
         $method = $_SERVER['REQUEST_METHOD'];
 
-        if (isset(self::$routes[$uri]) && self::$routes[$uri]['method'] === $method) {
-            $class = explode('@', self::$routes[$uri]['controller']);
+        if (isset(self::$routes[$uri->getPath()]) && self::$routes[$uri->getPath()]['method'] === $method) {
+            $class = explode('@', self::$routes[$uri->getPath()]['controller']);
             $functionName = $class[1];
 
             $className = "App\\Controller\\" . $class[0];
