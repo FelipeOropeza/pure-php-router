@@ -27,10 +27,11 @@ class Route
             $functionName = $class[1];
 
             $className = "App\\Controller\\" . $class[0];
-            
+
             if (class_exists($className)) {
                 $controller = new $className();
-                $controller->$functionName();
+                $data = $method === 'POST' ? Request::post() : [];
+                $controller->$functionName($data);
                 return;
             }
         }
