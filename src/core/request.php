@@ -6,6 +6,12 @@ class Request
 {
     public static function post(): array
     {
-        return $_POST;
+        $data = [];
+
+        foreach ($_POST as $key => $value) {
+            $data[$key] = htmlspecialchars($value);
+        }
+
+        return $data;
     }
 }
