@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Core\Controller;
+use App\Model\User;
 
 class HomeController extends Controller
 {
     public function home()
     {
+        $userModel = new User();
+        $userModel->teste();
         $this->view('home', [
             'titulo' => 'Minha Página'
         ]);
