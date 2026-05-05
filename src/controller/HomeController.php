@@ -15,7 +15,7 @@ class HomeController extends Controller
             $userModel->insert([
                 'nome' => 'Felipe',
                 'email' => 'felipe2006.co@gmail.com',
-                // 'senha' => '1234567'
+                'senha' => '1234567'
             ]);
 
             $this->view('home', [
