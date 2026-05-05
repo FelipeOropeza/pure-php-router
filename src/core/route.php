@@ -3,7 +3,6 @@
 namespace App\Core;
 
 use Uri\Rfc3986\Uri;
-use Uri\WhatWg\Url;
 
 class Route
 {

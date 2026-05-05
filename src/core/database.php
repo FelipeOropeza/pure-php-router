@@ -16,10 +16,10 @@ class Database
 
     public function __construct()
     {
-        $this->host = getenv('DB_HOST');
-        $this->db   = getenv('DB_NAME');
-        $this->user = getenv('DB_USER');
-        $this->pass = getenv('DB_PASS');
+        $this->host = $_ENV['DB_HOST'] ?? '';
+        $this->db   = $_ENV['DB_NAME'] ?? '';
+        $this->user = $_ENV['DB_USER'] ?? '';
+        $this->pass = $_ENV['DB_PASS'] ?? '';
 
         $dsn = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset";
         $options = [
@@ -27,7 +27,7 @@ class Database
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
         ];
-
+        
         try {
             $this->conn = new PDO($dsn, $this->user, $this->pass, $options);
         } catch (PDOException $e) {

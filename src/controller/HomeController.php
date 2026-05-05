@@ -4,16 +4,26 @@ namespace App\Controller;
 
 use App\Core\Controller;
 use App\Model\User;
+use Exception;
 
 class HomeController extends Controller
 {
     public function home()
     {
-        $userModel = new User();
-        $userModel->teste();
-        $this->view('home', [
-            'titulo' => 'Minha Página'
-        ]);
+        try {
+            $userModel = new User();
+            $userModel->insert([
+                'nome' => 'Felipe',
+                'email' => 'felipe2006.co@gmail.com',
+                // 'senha' => '1234567'
+            ]);
+
+            $this->view('home', [
+                'titulo' => 'Minha Página'
+            ]);
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
+        }
     }
 
     public function create()
