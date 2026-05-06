@@ -22,31 +22,20 @@ abstract class Model
             throw new Exception("Algo deu errado");
         }
 
-        $colunas = '';
-        foreach ($this->atributos as $coluna) {
-            $colunas .= $coluna . ', ';
+        $colunas = implode(", ", $this->atributos);
+
+        $values = array_map(fn($item) => ":" . $item, $this->atributos);
+        $values = implode(", ", $values);
+
+        $sql = "INSERT INTO {$this->table} ({$colunas}) values ({$values})";
+        $stmt = $this->conn->prepare($sql);
+
+        foreach ($this->atributos as $atributo) {
+            $stmt->bindValue(":" . $atributo, $data[$atributo]);
         }
+
+        $stmt->execute();
         
-        $letra = strlen($colunas) - 1;
-
-        $colunas = substr_replace($colunas, '', -1, $letra);
-
-        var_dump($colunas);
-        $values = '';
-        foreach ($this->atributos as $value) {
-            $values .= ":" . $value . ', ';
-        }
-
-        // $letra = strlen($values) - 1;
-
-        // $values = substr_replace($values, '', -1, $letra);
-
-        $sql = "INSERT INTO usuarios {$colunas} values {$values}";
-        var_dump($sql);
-        // $stmt = $this->conn->prepare($sql);
-
-        foreach ($data as $valor) {
-            var_dump($valor);
-        }
+        return 'Ok';
     }
 }

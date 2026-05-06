@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\Controller;
 use App\Model\User;
 use Exception;
+use PDOException;
 
 class HomeController extends Controller
 {
