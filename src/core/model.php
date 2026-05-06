@@ -4,6 +4,7 @@ namespace App\Core;
 
 use App\Core\Database;
 use Exception;
+use PDOException;
 
 abstract class Model
 {
@@ -16,7 +17,17 @@ abstract class Model
         $this->conn = (new Database())->getConnection();
     }
 
-    public function insert(array $data)
+    /**
+     * Insere um novo registro no banco de dados baseado nos atributos da Model.
+     *
+     * @param array $data Dados associativos a serem inseridos (ex: ['nome' => 'Felipe', 'email' => '...']).
+     * 
+     * @return string Retorna 'Ok' em caso de sucesso absoluto na inserção.
+     * 
+     * @throws PDOException Se houver uma falha no banco de dados (ex: email já cadastrado).
+     * @throws Exception Se a quantidade de itens no array $data não bater com os atributos permitidos.
+     */
+    public function insert(array $data): string
     {
         if (count($this->atributos) != count($data)) {
             throw new Exception("Algo deu errado");
@@ -35,7 +46,7 @@ abstract class Model
         }
 
         $stmt->execute();
-        
+
         return 'Ok';
     }
 }
