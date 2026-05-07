@@ -3,9 +3,13 @@
 namespace App\Core;
 
 use App\Core\Database;
+use App\Core\Query;
 use Exception;
 use PDOException;
 
+/**
+ * @mixin Query
+ */
 abstract class Model
 {
     protected string $table;
@@ -48,5 +52,16 @@ abstract class Model
         $stmt->execute();
 
         return 'Ok';
+    }
+
+    /**
+     * @param mixed $method
+     * @param mixed $args
+     */
+    public function __call($method, $args)
+    {
+        $query = new Query($this->table, $this->conn);
+
+        return $query->$method(...$args);
     }
 }
