@@ -28,7 +28,6 @@ abstract class Model
      * 
      * @return string Retorna 'Ok' em caso de sucesso absoluto na inserção.
      * 
-     * @throws PDOException Se houver uma falha no banco de dados (ex: email já cadastrado).
      * @throws Exception Se a quantidade de itens no array $data não bater com os atributos permitidos.
      */
     public function insert(array $data): string
@@ -48,6 +47,26 @@ abstract class Model
         foreach ($this->atributos as $atributo) {
             $stmt->bindValue(":" . $atributo, $data[$atributo]);
         }
+
+        $stmt->execute();
+
+        return 'Ok';
+    }
+
+    /**
+     * Deleta um registro no bando da dados com base no id.
+     *
+     * @param int $id Id do registro que vai ser removido.
+     * 
+     * @return string Retorna 'Ok' em caso de sucesso da exclução.
+     * 
+     */
+    public function delete(int $id)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bindValue(":id", $id);
 
         $stmt->execute();
 

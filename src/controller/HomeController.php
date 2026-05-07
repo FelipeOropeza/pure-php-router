@@ -16,7 +16,8 @@ class HomeController extends Controller
             $sql = $userModel->select("nome, email")->where("nome", "Felipe")->get();
 
             var_dump($sql);
-
+            
+            // $userModel->delete(1);
             die();
             
             $this->view('home', [
