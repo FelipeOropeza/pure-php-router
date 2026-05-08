@@ -74,6 +74,43 @@ abstract class Model
     }
 
     /**
+     * Atualizar um registro no banco de dados baseado nos atributos da Model.
+     *
+     * @param array $data Dados associativos a serem atualizados (Obs: precisa atualizar tudo).
+     * 
+     * @param int $id Indetificador do registro que vai ser alterado.
+     * 
+     * @return string Retorna 'Ok' em caso de sucesso absoluto na atualização.
+     * 
+     * @throws Exception Se a quantidade de itens no array $data não bater com os atributos permitidos.
+     */
+    public function update(array $data, int $id)
+    {
+        if (count($this->atributos) != count($data)) {
+            throw new Exception("Algo deu errado");
+        }
+
+        $colunas = array_map(fn($item) => $item . " = " . ":" . $item, $this->atributos);
+        $colunas = implode(", ", $colunas);
+
+        $sql = "UPDATE {$this->table} 
+        SET {$colunas} 
+        WHERE id = :id";
+
+        $stmt = $this->conn->prepare($sql);
+
+        foreach ($this->atributos as $atributo) {
+            $stmt->bindValue(":" . $atributo, $data[$atributo]);
+        }
+
+        $stmt->bindValue(":id", $id);
+
+        $stmt->execute();
+
+        return 'Ok';
+    }
+
+    /**
      * @param mixed $method
      * @param mixed $args
      */

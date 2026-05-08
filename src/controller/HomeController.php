@@ -13,13 +13,19 @@ class HomeController extends Controller
         try {
             $userModel = new User();
 
-            $sql = $userModel->select("nome, email")->where("nome", "Felipe")->get();
+            // $sql = $userModel->select("nome, email")->where("nome", "Felipe")->get();
 
-            var_dump($sql);
-            
+            // $userModel->update([
+            //     'nome' => "Felipe1",
+            //     'email' => "Teste@gmail.com",
+            //     'senha' => "32332323"
+            // ], 2);
+
+            // var_dump($sql);
+
             // $userModel->delete(1);
             die();
-            
+
             $this->view('home', [
                 'titulo' => 'Minha Página'
             ]);
@@ -36,10 +42,10 @@ class HomeController extends Controller
     public function createPost(array $data)
     {
         // $userModel->insert([
-            //     'nome' => 'Felipe',
-            //     'email' => 'felipe2006.co@gmail.com',
-            //     'senha' => '1234567'
-            // ]);
+        //     'nome' => 'Felipe',
+        //     'email' => 'felipe2006.co@gmail.com',
+        //     'senha' => '1234567'
+        // ]);
 
         $this->redirect('/create');
     }

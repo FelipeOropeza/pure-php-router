@@ -15,7 +15,6 @@ class Query
         $this->conn = $PDO;
     }
 
-
     /**
      * Seleciona quais campos vc quer que mostre no select.
      *
@@ -23,8 +22,13 @@ class Query
      * 
      * @return $this
      */
-    public function select($campo)
+    public function select(string $campo = "")
     {
+        if (empty($campo)) {
+            $this->query['select'] = "*";
+
+            return $this;
+        }
         $this->query['select'] = $campo;
 
         return $this;
@@ -39,14 +43,14 @@ class Query
      * 
      * @return $this
      */
-    public function where($campo, $valor)
+    public function where(string $campo, string $valor)
     {
         $this->query['where'][] = [$campo, $valor];
 
         return $this;
     }
 
-    public function get()
+    public function get(): array
     {
         $sql = "SELECT {$this->query['select']} FROM {$this->table}";
         $valores = [];
