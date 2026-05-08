@@ -50,6 +50,21 @@ class Query
         return $this;
     }
 
+    /**
+     * Limita a quantidade de registros
+     *
+     * @param int $valor Quantidade de registros.
+     * 
+     * @return $this
+     */
+
+    public function limit(int $valor)
+    {
+        $this->query['limit'] = $valor;
+
+        return $this;
+    }
+
     public function get(): array
     {
         $sql = "SELECT {$this->query['select']} FROM {$this->table}";
@@ -63,6 +78,12 @@ class Query
             $sql .= " WHERE {$campo} = :valor_where";
 
             $valores[':valor_where'] = $valor;
+        }
+
+        if (!empty($this->query['limit'])) {
+            $l = $this->query['limit'];
+            $valor = $l;
+            $sql .= " LIMIT {$valor}";
         }
 
         $stmt = $this->conn->prepare($sql);

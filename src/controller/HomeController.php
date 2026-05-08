@@ -13,7 +13,7 @@ class HomeController extends Controller
         try {
             $userModel = new User();
 
-            // $sql = $userModel->select("nome, email")->where("nome", "Felipe")->get();
+            $sql = $userModel->select("nome, email")->where("nome", "Felipe")->limit(1)->get();
 
             // $userModel->update([
             //     'nome' => "Felipe1",
@@ -21,7 +21,7 @@ class HomeController extends Controller
             //     'senha' => "32332323"
             // ], 2);
 
-            // var_dump($sql);
+            var_dump($sql);
 
             // $userModel->delete(1);
             die();
