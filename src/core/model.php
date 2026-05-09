@@ -4,8 +4,8 @@ namespace App\Core;
 
 use App\Core\Database;
 use App\Core\Query;
+use PDO;
 use Exception;
-use PDOException;
 
 /**
  * @mixin Query
@@ -14,11 +14,12 @@ abstract class Model
 {
     protected string $table;
     protected array $atributos;
-    private \PDO $conn;
+
+    protected PDO $conn;
 
     public function __construct()
     {
-        $this->conn = (new Database())->getConnection();
+        $this->conn = Database::getConnection();
     }
 
     /**

@@ -7,36 +7,33 @@ use PDOException;
 
 class Database
 {
-    private string $host;
-    private string $db;
-    private string $user;
-    private string $pass;
-    private string $charset = 'utf8mb4';
-    private ?PDO $conn = null;
+    private static ?PDO $conn = null;
 
-    public function __construct()
+    public static function getConnection(): PDO
     {
-        $this->host = $_ENV['DB_HOST'] ?? '';
-        $this->db   = $_ENV['DB_NAME'] ?? '';
-        $this->user = $_ENV['DB_USER'] ?? '';
-        $this->pass = $_ENV['DB_PASS'] ?? '';
+        if (self::$conn === null) {
 
-        $dsn = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset";
-        $options = [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
-        ];
-        
-        try {
-            $this->conn = new PDO($dsn, $this->user, $this->pass, $options);
-        } catch (PDOException $e) {
-            die("Erro de conexão: " . $e->getMessage());
+            $host = $_ENV['DB_HOST'] ?? '';
+            $db   = $_ENV['DB_NAME'] ?? '';
+            $user = $_ENV['DB_USER'] ?? '';
+            $pass = $_ENV['DB_PASS'] ?? '';
+            $charset = 'utf8mb4';
+
+            $dsn = "mysql:host={$host};dbname={$db};charset={$charset}";
+
+            $options = [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES   => false,
+            ];
+
+            try {
+                self::$conn = new PDO($dsn, $user, $pass, $options);
+            } catch (PDOException $e) {
+                die("Erro de conexão: " . $e->getMessage());
+            }
         }
-    }
 
-    public function getConnection(): PDO
-    {
-        return $this->conn;
+        return self::$conn;
     }
 }
