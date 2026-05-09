@@ -14,6 +14,7 @@ abstract class Model
 {
     protected string $table;
     protected array $atributos;
+    protected string $primaryKey;
 
     protected PDO $conn;
 
@@ -64,10 +65,10 @@ abstract class Model
      */
     public function delete(int $id)
     {
-        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+        $sql = "DELETE FROM {$this->table} WHERE {$this->primaryKey} = :id";
         $stmt = $this->conn->prepare($sql);
 
-        $stmt->bindValue(":id", $id);
+        $stmt->bindValue(":" . $this->primaryKey, $id);
 
         $stmt->execute();
 
@@ -96,7 +97,7 @@ abstract class Model
 
         $sql = "UPDATE {$this->table} 
         SET {$colunas} 
-        WHERE id = :id";
+        WHERE {$this->primaryKey} = :id";
 
         $stmt = $this->conn->prepare($sql);
 
@@ -104,7 +105,7 @@ abstract class Model
             $stmt->bindValue(":" . $atributo, $data[$atributo]);
         }
 
-        $stmt->bindValue(":id", $id);
+        $stmt->bindValue(":" . $this->primaryKey, $id);
 
         $stmt->execute();
 
