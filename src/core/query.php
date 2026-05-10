@@ -35,7 +35,7 @@ class Query
     }
 
     /**
-     * Cria uma condição de igualdade no select.
+     * Cria uma condição no select.
      *
      * @param string $campo Nome do campo que vai receber a condição.
      * 
@@ -43,9 +43,14 @@ class Query
      * 
      * @return $this
      */
-    public function where(string $campo, string $valor)
+    public function where(string $campo, string|int $condicao, string|int|null $valor = null)
     {
-        $this->query['where'][] = [$campo, $valor];
+        if ($valor === null) {
+            $valor = $condicao;
+            $condicao = "=";
+        }
+
+        $this->query['where'][] = [$campo, $condicao, $valor];
 
         return $this;
     }
@@ -73,9 +78,10 @@ class Query
         if (!empty($this->query['where'])) {
             $w = $this->query['where'][0];
             $campo = $w[0];
-            $valor = $w[1];
+            $condicao = $w[1];
+            $valor = $w[2];
 
-            $sql .= " WHERE {$campo} = :valor_where";
+            $sql .= " WHERE {$campo} {$condicao} :valor_where";
 
             $valores[':valor_where'] = $valor;
         }
