@@ -13,7 +13,12 @@ class HomeController extends Controller
         try {
             $userModel = new User();
 
-            $sql = $userModel->select("nome, email")->where("nome", "Felipe")->limit(1)->get();
+            $sql = $userModel
+                ->select()
+                ->where("nome", "Felipe")
+                ->where("id", 2)
+                ->limit(1)
+                ->get();
 
             // $userModel->update([
             //     'nome' => "Felipe1",

@@ -22,13 +22,8 @@ class Query
      * 
      * @return $this
      */
-    public function select(string $campo = "")
+    public function select(string $campo = "*")
     {
-        if (empty($campo)) {
-            $this->query['select'] = "*";
-
-            return $this;
-        }
         $this->query['select'] = $campo;
 
         return $this;
@@ -39,11 +34,13 @@ class Query
      *
      * @param string $campo Nome do campo que vai receber a condição.
      * 
-     * @param string $valor Valor do campo que vai ser comparado.
+     * @param string $condicao Condição a ser atendida pelo campo (=, <, >, <>)
+     * 
+     * @param string|int $valor Valor do campo que vai ser comparado á condição.
      * 
      * @return $this
      */
-    public function where(string $campo, string|int $condicao, string|int|null $valor = null)
+    public function where(string $campo, string $condicao, string|int|null $valor = null)
     {
         if ($valor === null) {
             $valor = $condicao;
@@ -76,14 +73,22 @@ class Query
         $valores = [];
 
         if (!empty($this->query['where'])) {
-            $w = $this->query['where'][0];
-            $campo = $w[0];
-            $condicao = $w[1];
-            $valor = $w[2];
+            $wheres = [];
 
-            $sql .= " WHERE {$campo} {$condicao} :valor_where";
+            foreach ($this->query['where'] as $i => $where) {
 
-            $valores[':valor_where'] = $valor;
+                $campo = $where[0];
+                $condicao = $where[1];
+                $valor = $where[2];
+
+                $placeholder = ":valor_where{$i}";
+
+                $wheres[] = "{$campo} {$condicao} {$placeholder}";
+
+                $valores[$placeholder] = $valor;
+            }
+
+            $sql .= " WHERE " . implode(" AND ", $wheres);
         }
 
         if (!empty($this->query['limit'])) {
