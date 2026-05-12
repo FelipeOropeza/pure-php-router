@@ -53,6 +53,22 @@ class Query
     }
 
     /**
+     * Cria uma ordenação com base no campo escolhido.
+     *
+     * @param string $campo Nome do campo que vai ser ordenado.
+     * 
+     * @param string $order Vai indicar se é crescente ou decrescente
+     * 
+     * @return $this
+     */
+
+    public function orderBy(string $campo, string $order = 'DESC')
+    {
+        $this->query['orderby'][] = [$campo, $order];
+        return $this;
+    }
+
+    /**
      * Limita a quantidade de registros
      *
      * @param int $valor Quantidade de registros.
@@ -89,6 +105,14 @@ class Query
             }
 
             $sql .= " WHERE " . implode(" AND ", $wheres);
+        }
+
+        if (!empty($this->query['orderby'])) {
+            $or = $this->query['orderby'][0];
+            $campo = $or[0];
+            $order = $or[1];
+
+            $sql .= " ORDER BY " . "{$campo} " . "{$order}";
         }
 
         if (!empty($this->query['limit'])) {

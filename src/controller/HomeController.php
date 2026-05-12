@@ -17,6 +17,7 @@ class HomeController extends Controller
                 ->select()
                 ->where("nome", "Felipe")
                 ->where("id", 2)
+                ->orderBy('nome')
                 ->limit(1)
                 ->get();
 
