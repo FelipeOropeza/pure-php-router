@@ -7,7 +7,9 @@ use App\Model\User;
 use Exception;
 
 class HomeController extends Controller
-{
+{   
+    protected string $layout = 'layout.php';
+
     public function home()
     {
         try {
@@ -30,7 +32,7 @@ class HomeController extends Controller
             var_dump($sql);
 
             // $userModel->delete(1);
-            die();
+            // die();
 
             $this->view('home', [
                 'titulo' => 'Minha Página'
