@@ -20,21 +20,44 @@ class Route
     {
         $uri = new Uri($_SERVER['REQUEST_URI']);
         $method = $_SERVER['REQUEST_METHOD'];
+        $path = $uri->getPath();
 
-        if (isset(self::$routes[$uri->getPath()]) && self::$routes[$uri->getPath()]['method'] === $method) {
-            $class = explode('@', self::$routes[$uri->getPath()]['controller']);
-            $functionName = $class[1];
+        if (!isset(self::$routes[$path])) {
+            return self::notFound();
+        }
 
-            $className = "App\\Controller\\" . $class[0];
+        $route = self::$routes[$path];
 
-            if (class_exists($className)) {
-                $controller = new $className();
-                $data = $method === 'POST' ? Request::post() : [];
+        if ($route['method'] !== $method) {
+            header("HTTP/1.0 405 Method Not Allowed");
+            echo "Método não permitido";
+            return;
+        }
+
+        list($controllerName, $functionName) = explode('@', $route['controller']);
+        $className = "App\\Controller\\" . $controllerName;
+
+        if (class_exists($className)) {
+            $controller = new $className();
+
+            if (method_exists($controller, $functionName)) {
+
+                if ($method === 'POST') {
+                    $data = Request::post();
+                } else {
+                    $data = filter_input_array(INPUT_GET, FILTER_SANITIZE_SPECIAL_CHARS) ?? [];
+                }
+
                 $controller->$functionName($data);
                 return;
             }
         }
 
+        self::notFound();
+    }
+
+    private static function notFound()
+    {
         header("HTTP/1.0 404 Not Found");
         echo "404 - Página não encontrada";
     }

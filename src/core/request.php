@@ -4,14 +4,13 @@ namespace App\Core;
 
 class Request
 {
-    public static function post(): array
+    /**
+     * @param array|int $filters Pode ser um filtro único ou um array de filtros específicos
+     */
+    public static function post($filters = FILTER_SANITIZE_SPECIAL_CHARS): array
     {
-        $data = [];
-
-        foreach ($_POST as $key => $value) {
-            $data[$key] = htmlspecialchars($value);
-        }
-
-        return $data;
+        $data = filter_input_array(INPUT_POST, $filters);
+        
+        return $data ?? [];
     }
 }

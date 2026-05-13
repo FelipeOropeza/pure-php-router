@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\Controller;
 use App\Model\User;
+use App\Core\Request;
 use Exception;
 
 class HomeController extends Controller
@@ -49,12 +50,13 @@ class HomeController extends Controller
 
     public function createPost(array $data)
     {
+        dd($data);
         // $userModel->insert([
         //     'nome' => 'Felipe',
         //     'email' => 'felipe2006.co@gmail.com',
         //     'senha' => '1234567'
         // ]);
 
-        $this->redirect('/create');
+        // $this->redirect('/create');
     }
 }
