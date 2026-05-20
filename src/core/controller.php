@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Core;
 
 abstract class Controller
 {
     protected string $baseView = __DIR__ . '/../view';
-    protected string $layout;
+    protected string $layout = '';
 
     protected function view(string $name, array $dados = [])
     {

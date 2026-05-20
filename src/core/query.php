@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Core;
 
 class Query
 {
-
     protected array $query = [];
     protected string $table;
     protected \PDO $conn;

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Core\Controller;
 use App\Model\User;
-use App\Core\Request;
 use Exception;
 
 class HomeController extends Controller
