@@ -40,8 +40,6 @@ Análise feita com base no código atual do projeto (maio/2026). O documento est
 
 **O que foi feito:** `view()` usa `ob_start()` / `ob_get_clean()` para capturar o HTML da view e injetar no layout. Correto.
 
-**Pequena melhoria detectada:** A propriedade `protected string $layout` está declarada sem valor padrão. Se um Controller filho não definir `$layout`, o PHP pode lançar um erro ao tentar ler a propriedade. Pesquise: **"PHP typed property must not be accessed before initialization"** para entender o problema e como inicializar corretamente.
-
 ---
 
 ## ✅ 6. Variáveis de Ambiente (`.env`)
@@ -64,7 +62,7 @@ Análise feita com base no código atual do projeto (maio/2026). O documento est
 
 ---
 
-## 🔴 8. Status Codes HTTP Corretos (`route.php`)
+## ✅ 8. Status Codes HTTP Corretos (`route.php`)
 
 **O Problema:** O `route.php` usa `header("HTTP/1.0 404 Not Found")`. O protocolo HTTP/1.0 é antigo e o PHP tem uma função nativa moderna para isso.
 
@@ -86,7 +84,7 @@ Análise feita com base no código atual do projeto (maio/2026). O documento est
 
 ---
 
-## 🔴 10. Tipagem Estrita e Recursos do PHP 8+
+## ✅ 10. Tipagem Estrita e Recursos do PHP 8+
 
 **O Problema:** Sem tipagem estrita, o PHP converte tipos silenciosamente, o que pode esconder bugs. Além disso, o código de classes pode ser mais enxuto.
 

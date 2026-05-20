@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core;
 
 use Uri\Rfc3986\Uri;
@@ -29,8 +31,8 @@ class Route
         $route = self::$routes[$path];
 
         if ($route['method'] !== $method) {
-            header("HTTP/1.0 405 Method Not Allowed");
-            echo "Método não permitido";
+            http_response_code(405);
+            echo "Método não permitido" . "<br>Erro: " . http_response_code();
             return;
         }
 
@@ -58,7 +60,7 @@ class Route
 
     private static function notFound()
     {
-        header("HTTP/1.0 404 Not Found");
-        echo "404 - Página não encontrada";
+        http_response_code(404);
+        echo "Essa rota não existe" . "<br>Erro: " . http_response_code();
     }
 }
