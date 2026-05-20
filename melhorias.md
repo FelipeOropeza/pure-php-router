@@ -107,7 +107,7 @@ Análise feita com base no código atual do projeto (maio/2026). O documento est
 
 ---
 
-## 🔴 12. Tratamento Global de Exceções
+## 🔴 12. Tratamento Global de Exceções (Quase feito)
 
 **O Problema:** Erros não tratados exibem mensagens cruas na tela (vaza informação de segurança) ou mostram tela em branco. O `die()` no `database.php` é o principal exemplo disso.
 
@@ -117,17 +117,3 @@ Análise feita com base no código atual do projeto (maio/2026). O documento est
 - **Hierarquia de exceções em PHP (`Exception`, `Error`, `Throwable`)** — entender a diferença entre os tipos
 - **Como criar exceções customizadas** — estender a classe `Exception` para criar `RouteNotFoundException`, `ViewNotFoundException`, etc.
 - **Variável de ambiente `APP_ENV`** — como usar para exibir detalhes do erro em desenvolvimento e esconder em produção
-
----
-
-## Ordem de Prioridade Sugerida
-
-| Prioridade | Item | Esforço | Impacto |
-|:---:|---|:---:|:---:|
-| 1º | **#8 — HTTP Status Codes** | Muito Baixo | Médio |
-| 2º | **#2 (fix) — Bug no OrderBy** | Muito Baixo | Baixo |
-| 3º | **#5 (fix) — Valor padrão em $layout** | Muito Baixo | Baixo |
-| 4º | **#10 — Strict Types + PHP 8+** | Baixo | Alto |
-| 5º | **#12 — Tratamento de Exceções** | Médio | Alto |
-| 6º | **#9 — Rotas Dinâmicas** | Médio | Alto |
-| 7º | **#11 — Middlewares** | Alto | Alto |
