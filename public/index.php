@@ -10,6 +10,7 @@ $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 Route::add('GET', '/', 'HomeController@home');
+Route::add('GET', '/user/{id}', 'HomeController@parametro');
 Route::add('GET', '/create', 'HomeController@create');
 Route::add('POST', '/createPost', 'HomeController@createPost');
 

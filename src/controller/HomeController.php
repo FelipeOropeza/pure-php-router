@@ -42,6 +42,10 @@ class HomeController extends Controller
         }
     }
 
+    public function parametro($data, string $params){
+        dd($params);
+    }
+
     public function create()
     {
         $this->view('create');

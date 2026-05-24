@@ -12,9 +12,14 @@ class Route
 
     public static function add(string $method, string $name, string $controller)
     {
+        $regexValida = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9-]+)', $name);
+
+        $pattern = '/^' . str_replace('/', '\/', $regexValida) . '$/';
+
         self::$routes[$name] = [
             'method' => $method,
-            'controller' => $controller
+            'controller' => $controller,
+            'regex' => $pattern
         ];
     }
 
@@ -24,33 +29,44 @@ class Route
         $method = $_SERVER['REQUEST_METHOD'];
         $path = $uri->getPath();
 
-        if (!isset(self::$routes[$path])) {
+        $routeFound = null;
+        $params = [];
+
+        foreach (self::$routes as $name => $routeData) {
+            if (preg_match($routeData['regex'], $path, $matches)) {
+                $routeFound = $routeData;
+
+                array_shift($matches);
+                $params = $matches;
+
+                break;
+            }
+        }
+
+        if (!$routeFound) {
             return self::notFound();
         }
 
-        $route = self::$routes[$path];
-
-        if ($route['method'] !== $method) {
+        if ($routeFound['method'] !== $method) {
             http_response_code(405);
             echo "Método não permitido" . "<br>Erro: " . http_response_code();
             return;
         }
 
-        list($controllerName, $functionName) = explode('@', $route['controller']);
+        list($controllerName, $functionName) = explode('@', $routeFound['controller']);
         $className = "App\\Controller\\" . $controllerName;
 
         if (class_exists($className)) {
             $controller = new $className();
 
             if (method_exists($controller, $functionName)) {
-
                 if ($method === 'POST') {
                     $data = Request::post();
                 } else {
                     $data = filter_input_array(INPUT_GET, FILTER_SANITIZE_SPECIAL_CHARS) ?? [];
                 }
 
-                $controller->$functionName($data);
+                $controller->$functionName($data, ...$params);
                 return;
             }
         }

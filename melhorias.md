@@ -72,7 +72,7 @@ Análise feita com base no código atual do projeto (maio/2026). O documento est
 
 ---
 
-## 🔴 9. Rotas Dinâmicas com Parâmetros (`route.php`)
+## ✅ 9. Rotas Dinâmicas com Parâmetros (`route.php`)
 
 **O Problema:** O router só faz match de string exata. Rotas como `/user/{id}` não funcionam.
 
