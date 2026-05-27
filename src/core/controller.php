@@ -13,7 +13,7 @@ abstract class Controller
         $file = $this->baseView . '/' . $name . '.php';
 
         if (!file_exists($file)) {
-            die("Erro: A view '{$name}' não foi encontrada em " . $this->baseView);
+            throw new \Exception("Erro: A view '{$name}' não foi encontrada em " . $this->baseView);
         }
 
         extract($dados);

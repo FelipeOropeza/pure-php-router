@@ -6,13 +6,9 @@ namespace App\Core;
 class Query
 {
     protected array $query = [];
-    protected string $table;
-    protected \PDO $conn;
 
-    public function __construct(string $table, \PDO $PDO)
+    public function __construct(protected string $table, protected \PDO $conn)
     {
-        $this->table = $table;
-        $this->conn = $PDO;
     }
 
     /**
@@ -108,11 +104,13 @@ class Query
         }
 
         if (!empty($this->query['orderby'])) {
-            $or = $this->query['orderby'][0];
-            $campo = $or[0];
-            $order = $or[1];
-
-            $sql .= " ORDER BY " . "{$campo} " . "{$order}";
+            $orders = [];
+            foreach ($this->query['orderby'] as $or) {
+                $campo = $or[0];
+                $order = $or[1];
+                $orders[] = "{$campo} {$order}";
+            }
+            $sql .= " ORDER BY " . implode(", ", $orders);
         }
 
         if (!empty($this->query['limit'])) {

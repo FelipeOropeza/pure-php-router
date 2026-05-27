@@ -10,7 +10,7 @@ class Route
 {
     private static array $routes = [];
 
-    public static function add(string $method, string $name, string $controller)
+    public static function add(string $method, string $name, string $controller, array $middlewares = [])
     {
         $regexValida = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9-]+)', $name);
 
@@ -19,7 +19,8 @@ class Route
         self::$routes[$name] = [
             'method' => $method,
             'controller' => $controller,
-            'regex' => $pattern
+            'regex' => $pattern,
+            'middlewares' => $middlewares
         ];
     }
 
@@ -66,7 +67,24 @@ class Route
                     $data = filter_input_array(INPUT_GET, FILTER_SANITIZE_SPECIAL_CHARS) ?? [];
                 }
 
-                $controller->$functionName($data, ...$params);
+                $middlewares = $routeFound['middlewares'] ?? [];
+
+                $core = function($data) use ($controller, $functionName, $params) {
+                    $controller->$functionName($data, ...$params);
+                };
+
+                $pipeline = array_reduce(
+                    array_reverse($middlewares),
+                    function($next, $middlewareClass) {
+                        return function($data) use ($middlewareClass, $next) {
+                            $middleware = new $middlewareClass();
+                            return $middleware->handle($data, $next);
+                        };
+                    },
+                    $core
+                );
+
+                $pipeline($data);
                 return;
             }
         }

@@ -96,7 +96,7 @@ Análise feita com base no código atual do projeto (maio/2026). O documento est
 
 ---
 
-## 🔴 11. Middlewares (Interceptadores de Rota)
+## ✅ 11. Middlewares (Interceptadores de Rota)
 
 **O Problema:** Não existe camada entre a rota e o Controller. Proteger rotas exige repetir lógica em cada método.
 
@@ -107,7 +107,7 @@ Análise feita com base no código atual do projeto (maio/2026). O documento est
 
 ---
 
-## 🔴 12. Tratamento Global de Exceções (Quase feito)
+## ✅ 12. Tratamento Global de Exceções (Quase feito)
 
 **O Problema:** Erros não tratados exibem mensagens cruas na tela (vaza informação de segurança) ou mostram tela em branco. O `die()` no `database.php` é o principal exemplo disso.
 
