@@ -5,7 +5,7 @@ namespace App\Core;
 
 abstract class Controller
 {
-    protected string $baseView = __DIR__ . '/../view';
+    protected string $baseView = __DIR__ . '/../View';
     protected string $layout = '';
 
     protected function view(string $name, array $dados = [])
